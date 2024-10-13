@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture IP Address</title>
+    <script>
+        async function fetchIp() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                const userIp = data.ip;
+
+                // Display the user's IP address
+                document.getElementById('ip-address').textContent = `Your IP Address: ${userIp}`;
+
+                // Store the IP address and timestamp in local storage
+                const recordedIPs = JSON.parse(localStorage.getItem('recordedIPs')) || [];
+                const timestamp = new Date().toLocaleString();
+
+                // Create an entry object
+                const entry = {
+                    ip: userIp,
+                    time: timestamp
+                };
+
+                // Check if the IP is already recorded
+                if (!recordedIPs.some(record => record.ip === userIp)) {
+                    recordedIPs.push(entry);
+                    localStorage.setItem('recordedIPs', JSON.stringify(recordedIPs));
+                }
+
+                alert(`IP Address recorded: ${userIp} at ${timestamp}`);
+            } catch (error) {
+                console.error('Error fetching IP address:', error);
+            }
+        }
+
+        window.onload = fetchIp;
+    </script>
+</head>
+<body>
+    <h1>Welcome!</h1>
+    <p id="ip-address">Fetching your IP address...</p>
+</body>
+</html>

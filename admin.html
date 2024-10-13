@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - View IPs</title>
+    <script>
+        function displayIps() {
+            const ipList = document.getElementById('ip-list');
+            const recordedIPs = JSON.parse(localStorage.getItem('recordedIPs')) || [];
+
+            if (recordedIPs.length === 0) {
+                const listItem = document.createElement('li');
+                listItem.textContent = "No IP addresses recorded.";
+                ipList.appendChild(listItem);
+            } else {
+                recordedIPs.forEach(ip => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = ip;
+                    ipList.appendChild(listItem);
+                });
+            }
+        }
+
+        window.onload = displayIps;
+    </script>
+</head>
+<body>
+    <h1>Admin - Recorded IP Addresses</h1>
+    <ul id="ip-list">
+        <!-- IP addresses will be dynamically added here -->
+    </ul>
+</body>
+</html>
+
