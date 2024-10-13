@@ -14,9 +14,9 @@
                 listItem.textContent = "No IP addresses recorded.";
                 ipList.appendChild(listItem);
             } else {
-                recordedIPs.forEach(ip => {
+                recordedIPs.forEach(entry => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = ip;
+                    listItem.textContent = `IP: ${entry.ip} - Recorded at: ${entry.time}`;
                     ipList.appendChild(listItem);
                 });
             }
@@ -32,4 +32,3 @@
     </ul>
 </body>
 </html>
-
