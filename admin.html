@@ -3,32 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - View IPs</title>
-    <script>
-        function displayIps() {
-            const ipList = document.getElementById('ip-list');
-            const recordedIPs = JSON.parse(localStorage.getItem('recordedIPs')) || [];
-
-            if (recordedIPs.length === 0) {
-                const listItem = document.createElement('li');
-                listItem.textContent = "No IP addresses recorded.";
-                ipList.appendChild(listItem);
-            } else {
-                recordedIPs.forEach(entry => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `IP: ${entry.ip} - Recorded at: ${entry.time}`;
-                    ipList.appendChild(listItem);
-                });
-            }
-        }
-
-        window.onload = displayIps;
-    </script>
+    <title>Admin Page</title>
 </head>
 <body>
-    <h1>Admin - Recorded IP Addresses</h1>
-    <ul id="ip-list">
-        <!-- IP addresses will be dynamically added here -->
-    </ul>
+    <h1>Admin Page</h1>
+    <p>Stored IP addresses:</p>
+    <ul id="ipList">Loading...</ul>
+
+    <script>
+        async function loadIPs() {
+            const repoOwner = 'your_github_username';  // Replace with your GitHub username
+            const repoName = 'your_repo_name';  // Replace with your GitHub repository name
+            const filePath = 'ips.json';  // Path to the file in your GitHub repository
+
+            // Fetch the file from GitHub
+            const fileUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+            const response = await fetch(fileUrl);
+            const fileData = await response.json();
+
+            // Decode the base64 content
+            const content = atob(fileData.content);
+            const ipList = JSON.parse(content);
+
+            // Display the IP addresses
+            const ul = document.getElementById('ipList');
+            ul.innerHTML = '';  // Clear the list
+
+            ipList.forEach(ipEntry => {
+                const li = document.createElement('li');
+                li.textContent = `${ipEntry.ip} (added at ${ipEntry.timestamp})`;
+                ul.appendChild(li);
+            });
+        }
+
+        // Load and display the IPs when the page loads
+        loadIPs();
+    </script>
 </body>
 </html>
